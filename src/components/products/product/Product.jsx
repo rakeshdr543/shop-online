@@ -21,7 +21,7 @@ const Product = ({product}) => {
                 <Typography dangerouslySetInnerHTML={{__html:product.description}} variant='body' color='textSecondary' />
             </CardContent>
             <CardActions disableSpacing className={classes.cardActions}>
-                <IconButton aria-label='Add to Cart'>
+                <IconButton aria-label='Added to Cart'>
                     <AddShoppingCart />
                 </IconButton>
             </CardActions>
