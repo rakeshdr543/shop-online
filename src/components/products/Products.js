@@ -3,8 +3,6 @@ import React from 'react';
 import Product from './product/Product';
 import useStyles from './styles';
 
-
-
 const Products = ({products,onAddToCart}) => {
     const classes = useStyles();
     return (

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { Cart, Products } from './components';
 import Navbar from './components/navbar/Navbar';
-import Products from './components/products/Products';
+import { CssBaseline } from '@material-ui/core';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { commerce } from './lib/commerce';
 
 const App = () => {
@@ -23,6 +25,24 @@ const App = () => {
         setCart(item.cart);
       };
 
+      const handleUpdateCartQty = async (lineItemId, quantity) => {
+        const response = await commerce.cart.update(lineItemId, { quantity });
+    
+        setCart(response.cart);
+      };
+    
+      const handleRemoveFromCart = async (lineItemId) => {
+        const response = await commerce.cart.remove(lineItemId);
+    
+        setCart(response.cart);
+      };
+    
+      const handleEmptyCart = async () => {
+        const response = await commerce.cart.empty();
+    
+        setCart(response.cart);
+      };
+
       useEffect(() => {
         fetchProducts();
         fetchCart();
@@ -30,10 +50,23 @@ const App = () => {
       }, []);
 
     return (
-        <>
-            <Navbar totalItems={cart.total_items} />
-            <Products products={products} onAddToCart={handleAddToCart} />
-        </>
+      <Router>
+      <div style={{ display: 'flex' }}>
+        <CssBaseline />
+        <Navbar totalItems={cart.total_items}  />
+        <Switch>
+          <Route exact path="/">
+            <Products products={products} onAddToCart={handleAddToCart} handleUpdateCartQty />
+          </Route>
+          <Route exact path="/cart">
+            <Cart cart={cart} onUpdateCartQty={handleUpdateCartQty} onRemoveFromCart={handleRemoveFromCart} onEmptyCart={handleEmptyCart} />
+          </Route>
+          {/* <Route path="/checkout" exact>
+            <Checkout cart={cart} order={order} onCaptureCheckout={handleCaptureCheckout} error={errorMessage} />
+          </Route> */}
+        </Switch>
+      </div>
+    </Router>
     )
 }
 
